@@ -1,0 +1,32 @@
+# ■ポリシーの書き方
+#
+# [conf]  -> IDになる。結果はこのIDの順番でソートされる
+# description="" -> 説明。ここに書いたものが画面に表示される
+# directive=""  -> 調査対象のディレクティブを指定する
+# value="" -> 調査対象の値を指定する。区切り文字は「/(スラッシュ)」を使用する。
+# logic="" -> 同じディレクティブが複数行あった際、それぞれの判定結果を「OR」か「AND」で指定。ディレクティブの存在性確認の際は「EXIST」を指定。
+# instruction="" -> 命令。別途説明。
+#
+#
+# ■命令
+# これらの命令は一致するディレクティブに対して1行づつ実行される。
+# 行と行の間の評価結果はlogicでAND(すべての行がpassしないといけない)かOR(一行でもpassすればよい)を指定する。
+# そのためnot_がつく命令は、1行ごとにvalueと比較した結果を反転させる
+# 
+# match -> valueに指定したパターンがマッチするか評価。マッチしたらpass、マッチしなければfailとなる
+# not_match -> 判定ロジックはmatchと同じ。マッチしたらfail、マッチしなければpassとなる
+# exist_all -> valueに値を「/」区切りで指定。指定した複数の値がすべてその行に存在していたらpassとなる。値は区切らず1つでも動作する。
+# not_exist_all -> valueに値を「/」区切りで指定。指定した複数の値がすべてその行に存在しなければpassとなる。値は区切らず1つでも動作する。
+# at_least_one -> valueに値を「/」区切りで指定。指定した複数の値が一つでもその行に存在していればpassとなる。値は区切らず1つでも動作する。
+# not_at_least_one -> valueに値を「/」区切りで指定。指定した複数の値が一つも存在していなければpassとなる。値は区切らず1つでも動作する。
+# exist -> そのディレクティブが存在する場合passとなる。valueの値は無視され、logicは専用の「EXIST」を指定しなければならない。
+# not_exist -> そのディレクティブが存在しない場合passとなる。valueの値は無視され、logicは専用の「EXIST」を指定しなければならない。
+#
+#
+
+[ServerTokens]
+description="ServerTokensが有効になっていないかチェックする"
+directive="ServerTokens"
+value="Prod/ProductOnly"
+logic="AND"
+instruction="at_least_one"
